@@ -638,7 +638,15 @@ void LevelDB::push_flush(push_state& state) {
         state.completed_sstables.begin(), state.completed_sstables.end());
   }
 }
-
+/**
+* @brief: In the level of the LevelDB, find overlapping indices 
+*
+* @para[in]:  level -- the level we are focusing on.
+* @para[in]:  first -- the starting key 
+* @para[in]:  last  -- the ending key
+* @para[out]: out_sstable_indices -- containing overlapping indices which overlap with [first -- last]
+*
+*/
 void LevelDB::find_overlapping_tables(
     std::size_t level, const LevelDBKey& first, const LevelDBKey& last,
     std::vector<std::size_t>& out_sstable_indices) {
