@@ -207,6 +207,14 @@ struct _LevelDBSSTableComparer {
   }
 };
 
+/* 
+ * @brief: core function of leveldb.
+ * 
+ * @param[in]: sstable_runs --- leveldb
+ * @param[in]: level        --- the level we want to do merge 
+ * 
+ * 
+*/
 void LevelDB::merge_sstables(const levels_t& sstable_runs, std::size_t level) {
   // The current SSTable in each run.
   std::size_t sstables_idx[sstable_runs.size()];
@@ -244,6 +252,7 @@ void LevelDB::merge_sstables(const levels_t& sstable_runs, std::size_t level) {
 
     std::size_t start = sstables_pos[i];
     std::size_t end;
+    /*find complicting range*/
     if (heap.size() == 0)
       // No other SSTables; we can take the remaining items in this SSTable.
       end = size;
@@ -259,7 +268,7 @@ void LevelDB::merge_sstables(const levels_t& sstable_runs, std::size_t level) {
     push_items(state, *sstable, start, end);
 
     if (end < size) {
-      // More items in this SSTable.
+      // More items in this SSTable. record end position of this sstable
       sstables_pos[i] = end;
 
       heap.push_back(i);
@@ -666,6 +675,7 @@ void LevelDB::find_overlapping_tables(
   }
 }
 
+// TODO: to complicated, did not figured it out at this time. 07/27/2016
 void LevelDB::compact(
     std::size_t level,
     const std::vector<std::vector<std::size_t>>& sstable_indices) {
